@@ -68,7 +68,7 @@ def train_sentiment_model_and_save_to_disk():
         data_split_stratify=True,
         silent=True,
     )
-    top3 = compare_models(n_select=3)
+    top3 = compare_models(n_select=3, sort='AUC')
     print("Top 3 models:")
     print(top3[0])
     print(top3[1])

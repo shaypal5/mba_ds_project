@@ -16,6 +16,7 @@ with open('README.rst', encoding="utf-8") as f:
 INSTALL_REQUIRES = [
     'pandas>=0.18.0',  # obviously
     'pycaret==2.3.6',
+    'pdpipe==0.1.3',
 ]
 
 
