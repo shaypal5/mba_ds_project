@@ -1,5 +1,7 @@
 """Processing pipeline for mba."""
 
+from typing import Tuple, Optional
+
 import pandas as pd
 import pdpipe as pdp
 from pdpipe.util import out_of_place_col_insert
@@ -91,7 +93,7 @@ class AddSentimentColumns(pdp.PdPipelineStage):
         subdf[Column.SENTIMENT_0] = dumm[0]
         subdf[Column.SENTIMENT_1] = dumm[1]
         subdf = subdf.set_index(Column.ID)
-        subdf = subdf.drop('sentiment', axis=1)
+        subdf = subdf.drop(Column.SENTIMENT, axis=1)
         res_df = df.join(subdf)
         if verbose:
             n = len(res_df) - res_df[Column.SENTIMENT_0].isna().sum()
@@ -101,7 +103,29 @@ class AddSentimentColumns(pdp.PdPipelineStage):
         return res_df
 
 
-def build_pipeline():
+class _StatusColBuilder():
+    """A callable that returns an ordinal join of the status features, with
+    their ordinality determined by the given weights, as a pandas Series.
+
+    Parameters
+    ----------
+    status_weights : 3-tuple of floats
+        The weights corresponding to silver, gold and platinum status, in this
+        order
+    """
+
+    def __init__(self, status_weights: Tuple[float, float, float]):
+        self.status_weights = status_weights
+
+    def __call__(self, df: pd.DataFrame) -> pd.Series:
+        return df[Column.STATUS_SILVER] * self.status_weights[0] \
+            + df[Column.STATUS_GOLD] * self.status_weights[1] \
+            + df[Column.STATUS_PANTINUM] * self.status_weights[2]
+
+
+def build_pipeline(
+    status_weights: Optional[Tuple[float]] = (1, 2, 3),
+):
     """Build a preprocessing pipeline for sales recommendations model."""
     print("Starting to build the preprocessing pipeline...")
     print("Building the sentiment predictor...")
@@ -111,6 +135,17 @@ def build_pipeline():
     stages = [
         pdp.df.set_index(keys=Column.ID),
         AddSentimentColumns(sent_pred),
+        pdp.ColByFrameFunc(
+            column=Column.STATUS_ORD,
+            func=_StatusColBuilder(status_weights),
+            follow_column=Column.STATUS_SILVER,
+            func_desc="weight-summing the status columns",
+        ),
+        pdp.ColDrop([
+            Column.STATUS_SILVER,
+            Column.STATUS_GOLD,
+            Column.STATUS_PANTINUM,
+        ])
     ]
     print("Done. Returning pipeline.")
     return pdp.PdPipeline(stages)

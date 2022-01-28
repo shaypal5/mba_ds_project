@@ -33,9 +33,33 @@ class Column:
     CREDIT_FLAG = 'CREDIT_FLAG'
     RECSYS_FLAG = 'RECSYS_FLAG'
     BUYER_FLAG = 'BUYER_FLAG'
-    SENTIMENT = 'sentiment'
-    SENTIMENT_0 = 'sentiment_0'
-    SENTIMENT_1 = 'sentiment_1'
+    SENTIMENT = 'SENTIMENT'
+    SENTIMENT_0 = 'SENTIMENT_0'
+    SENTIMENT_1 = 'SENTIMENT_1'
+    STATUS_ORD = 'STATUS_ORD'
+
+
+class FeatureGroup:
+    FARE = 'FARE'
+    POINTS = 'POINTS'
+
+
+FEATURE_GROUPS = {
+    FeatureGroup.FARE: [
+        Column.FARE_L_Y1,
+        Column.FARE_L_Y2,
+        Column.FARE_L_Y3,
+        Column.FARE_L_Y4,
+        Column.FARE_L_Y5,
+    ],
+    FeatureGroup.POINTS: [
+        Column.POINTS_L_Y1,
+        Column.POINTS_L_Y2,
+        Column.POINTS_L_Y3,
+        Column.POINTS_L_Y4,
+        Column.POINTS_L_Y5,
+    ],
+}
 
 
 class ContextKey:
