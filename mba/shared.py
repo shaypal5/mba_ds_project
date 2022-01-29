@@ -39,6 +39,40 @@ class Column:
     STATUS_ORD = 'STATUS_ORD'
 
 
+CATEGORICAL_COLUMNS = [
+    Column.STATUS_PANTINUM,
+    Column.STATUS_GOLD,
+    Column.STATUS_SILVER,
+    Column.SERVICE_FLAG,
+    Column.CANCEL_FLAG,
+    Column.CREDIT_FLAG,
+    Column.RECSYS_FLAG,
+    Column.SENTIMENT_0,
+    Column.SENTIMENT_1,
+]
+
+NUMERIC_COLUMNS = [
+    Column.OTHER_SITE_VALUE,
+    Column.NUM_DEAL,
+    Column.LAST_DEAL,
+    Column.ADVANCE_PURCHASE,
+    Column.FARE_L_Y1,
+    Column.FARE_L_Y2,
+    Column.FARE_L_Y3,
+    Column.FARE_L_Y4,
+    Column.FARE_L_Y5,
+    Column.POINTS_L_Y1,
+    Column.POINTS_L_Y2,
+    Column.POINTS_L_Y3,
+    Column.POINTS_L_Y4,
+    Column.POINTS_L_Y5,
+]
+
+ORDINAL_COLUMNS = [
+    Column.STATUS_ORD,
+]
+
+
 class FeatureGroup:
     FARE = 'FARE'
     POINTS = 'POINTS'

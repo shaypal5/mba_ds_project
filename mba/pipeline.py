@@ -135,17 +135,17 @@ def build_pipeline(
     stages = [
         pdp.df.set_index(keys=Column.ID),
         AddSentimentColumns(sent_pred),
-        pdp.ColByFrameFunc(
-            column=Column.STATUS_ORD,
-            func=_StatusColBuilder(status_weights),
-            follow_column=Column.STATUS_SILVER,
-            func_desc="weight-summing the status columns",
-        ),
-        pdp.ColDrop([
-            Column.STATUS_SILVER,
-            Column.STATUS_GOLD,
-            Column.STATUS_PANTINUM,
-        ])
+        # pdp.ColByFrameFunc(
+        #     column=Column.STATUS_ORD,
+        #     func=_StatusColBuilder(status_weights),
+        #     follow_column=Column.STATUS_SILVER,
+        #     func_desc="weight-summing the status columns",
+        # ),
+        # pdp.ColDrop([
+        #     Column.STATUS_SILVER,
+        #     Column.STATUS_GOLD,
+        #     Column.STATUS_PANTINUM,
+        # ])
     ]
     print("Done. Returning pipeline.")
     return pdp.PdPipeline(stages)
