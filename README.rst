@@ -38,6 +38,16 @@ Use
 **Note:** The package relies on being able to create new directories and files in the ``models`` folder in the root of the repository.
 
 
+Call the prediction script in the following way:
+
+.. code-block:: bash
+
+   python scripts/predict_buyer.py <input_fpath> <input_reviews_fpath> <output_fpath>
+
+
+If no path to input and output files are provided, default paths - relying on the data files bening in the ``data/`` folder.
+
+
 Notebooks
 =========
 

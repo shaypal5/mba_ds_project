@@ -1,5 +1,6 @@
 """Processing pipeline for mba."""
 
+import warnings
 from typing import Tuple, Optional
 
 import pandas as pd
@@ -12,6 +13,7 @@ from .sentiment import (
 )
 from .shared import (
     Column,
+    ContextKey
 )
 
 
@@ -65,8 +67,13 @@ class AddSentimentColumns(pdp.PdPipelineStage):
 
     def _transform(
             self, df: pd.DataFrame, verbose=None) -> pd.DataFrame:
-        rev_fpath = self.application_context.get('reviews_fpath', None)
+        rev_fpath = self.application_context.get(
+            ContextKey.REVIEWS_FPATH, None)
         if rev_fpath is None:
+            warnings.warn(
+                "No input review file path in pipeline application context! "
+                "Filling both sentiment columns with zeros!"
+            )
             res_df = out_of_place_col_insert(
                 df=df,
                 series=[0] * len(df),
@@ -82,6 +89,7 @@ class AddSentimentColumns(pdp.PdPipelineStage):
             return res_df
         rev_df = pd.read_csv(rev_fpath)
         if verbose:
+            print(f"Reviews df len: {len(rev_df)}")
             rev_ids = set(rev_df[Column.ID])
             input_ids = set(df.index)
             inter = rev_ids.intersection(input_ids)
